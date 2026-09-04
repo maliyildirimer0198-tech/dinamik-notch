@@ -6,21 +6,17 @@ jobs:
   build:
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v3
-      
-      - name: Setup Xcode
-        uses: maxim-lobanov/setup-xcode@v1
-        with:
-          xcode-version: latest
+      - uses: actions/checkout@v4
 
-      - name: Build App
+      - name: Build with swift
         run: |
-          mkdir -p Payload
-          swiftc -sdk $(xcrun --sdk iphoneos --show-sdk-path) -target arm64-apple-ios15.0 ContentView.swift -o Payload/DynamicNotch
+          mkdir -p Payload/DynamicNotch.app
+          xcrun -sdk iphoneos swiftc -parse-as-library -target arm64-apple-ios15.0 ContentView.swift -o Payload/DynamicNotch.app/DynamicNotch
+          echo '<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"><plist version="1.0"><dict><key>CFBundleIdentifier</key><string>com.example.dynamicnotch</string><key>CFBundleName</key><string>DynamicNotch</string><key>CFBundleExecutable</key><string>DynamicNotch</string><key>CFBundleVersion</key><string>1</string><key>CFBundleShortVersionString</key><string>1.0</string></dict></plist>' > Payload/DynamicNotch.app/Info.plist
           zip -r DynamicNotch.ipa Payload
-          
+
       - name: Upload IPA
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: DynamicNotch-IPA
           path: DynamicNotch.ipa
