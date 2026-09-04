@@ -1,0 +1,26 @@
+name: Build IPA
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest
+
+      - name: Build App
+        run: |
+          mkdir -p Payload
+          swiftc -sdk $(xcrun --sdk iphoneos --show-sdk-path) -target arm64-apple-ios15.0 ContentView.swift -o Payload/DynamicNotch
+          zip -r DynamicNotch.ipa Payload
+          
+      - name: Upload IPA
+        uses: actions/upload-artifact@v3
+        with:
+          name: DynamicNotch-IPA
+          path: DynamicNotch.ipa
