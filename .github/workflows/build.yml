@@ -8,11 +8,36 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Build with swift
+      - name: Build and Package
         run: |
           mkdir -p Payload/DynamicNotch.app
           xcrun -sdk iphoneos swiftc -parse-as-library -target arm64-apple-ios15.0 ContentView.swift -o Payload/DynamicNotch.app/DynamicNotch
-          echo '<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"><plist version="1.0"><dict><key>CFBundleIdentifier</key><string>com.example.dynamicnotch</string><key>CFBundleName</key><string>DynamicNotch</string><key>CFBundleExecutable</key><string>DynamicNotch</string><key>CFBundleVersion</key><string>1</string><key>CFBundleShortVersionString</key><string>1.0</string></dict></plist>' > Payload/DynamicNotch.app/Info.plist
+          
+          cat << 'EOF' > Payload/DynamicNotch.app/Info.plist
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+              <key>CFBundleExecutable</key>
+              <string>DynamicNotch</string>
+              <key>CFBundleIdentifier</key>
+              <string>com.maliyildirimer.dynamicnotch</string>
+              <key>CFBundleName</key>
+              <string>DynamicNotch</string>
+              <key>CFBundlePackageType</key>
+              <string>APPL</string>
+              <key>CFBundleShortVersionString</key>
+              <string>1.0</string>
+              <key>CFBundleVersion</key>
+              <string>1</string>
+              <key>LSRequiresIPhoneOS</key>
+              <true/>
+              <key>MinimumOSVersion</key>
+              <string>15.0</string>
+          </dict>
+          </plist>
+          EOF
+
           zip -r DynamicNotch.ipa Payload
 
       - name: Upload IPA
