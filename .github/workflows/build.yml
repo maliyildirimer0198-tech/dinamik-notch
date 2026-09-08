@@ -11,7 +11,7 @@ jobs:
       - name: Build and Package
         run: |
           mkdir -p Payload/DynamicNotch.app
-          xcrun -sdk iphoneos swiftc -parse-as-library -target arm64-apple-ios15.0 ContentView.swift -o Payload/DynamicNotch.app/DynamicNotch
+          xcrun -sdk iphoneos swiftc -parse-as-library -target arm64-apple-ios15.0 -framework SwiftUI -framework MediaPlayer -framework AVFoundation -framework UIKit ContentView.swift -o Payload/DynamicNotch.app/DynamicNotch
           
           cat << 'EOF' > Payload/DynamicNotch.app/Info.plist
           <?xml version="1.0" encoding="UTF-8"?>
@@ -34,6 +34,8 @@ jobs:
               <true/>
               <key>MinimumOSVersion</key>
               <string>15.0</string>
+              <key>NSAppleMusicUsageDescription</key>
+              <string>Müzik bilgilerini çentikte gösterebilmek için izin gerekiyor.</string>
           </dict>
           </plist>
           EOF
