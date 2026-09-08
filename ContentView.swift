@@ -2,6 +2,15 @@ import SwiftUI
 import MediaPlayer
 import AVFoundation
 
+@main
+struct DynamicNotchApp: App {
+    var body: some Scene {
+        WindowGroup {
+            ContentView()
+        }
+    }
+}
+
 struct ContentView: View {
     @State private var isExpanded = false
     @State private var songTitle = "Müzik Çalmıyor"
@@ -19,7 +28,6 @@ struct ContentView: View {
             VStack(spacing: 0) {
                 HStack(spacing: 12) {
                     if isExpanded {
-                        // --- Genişletilmiş Çentik Modu ---
                         HStack(spacing: 12) {
                             if let art = albumArt {
                                 Image(uiImage: art)
@@ -71,7 +79,6 @@ struct ContentView: View {
                         .padding(.horizontal, 14)
                         .transition(.opacity.combined(with: .scale(scale: 0.95)))
                     } else {
-                        // --- Kapalı Çentik Modu ---
                         HStack {
                             Image(systemName: "music.note")
                                 .font(.system(size: 11, weight: .bold))
